@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Consensus</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <div>
+      <h1>Blockchain Consensus</h1>
+    </div>
+    <div>
+      <h2>Game Configuration</h2>
+      <form action="/save_config" method="POST">
+        <div>
+          <h3>Environment Configuration</h3>
+          <label for="var1">Var1</label>
+          <input type="text" name="var1" id="var1" /><br /><br />
+          <label for="var2">Var2</label>
+          <input type="text" name="var2" id="var2" /><br /><br />
+          <label for="var3">Var3</label>
+          <input type="text" name="var3" id="var3" /><br /><br />
+          <label for="load_env">Load Environment Configuration</label>
+          <select name="load_env" id="load_env">
+            <option value="option_1">option_1</option>
+            <option value="option_2">option_2</option>
+          </select>
+        </div>
+        <div>
+          <h3>Validator Configuration</h3>
+          <label for="var1">Var1</label>
+          <input type="text" name="var1" id="var1" /><br /><br />
+          <label for="var2">Var2</label>
+          <input type="text" name="var2" id="var2" /><br /><br />
+          <label for="var3">Var3</label>
+          <input type="text" name="var3" id="var3" /><br /><br />
+          <label for="load_val">Load Validator Configuration</label>
+          <select name="load_val" id="load_val">
+            <option value="option_1">option_1</option>
+            <option value="option_2">option_2</option>
+          </select>
+        </div>
+      </form>
+      <button>Start</button>
+    </div>
+    <hr />
+
+    <div>
+      <h2>Status</h2>
+      <div>
+        <h3>Epoch: 0</h3>
+        <p>Var1: 0</p>
+        <p>Var2: 0</p>
+        <p>Var3: 0</p>
+      </div>
+    </div>
+
+    <div>
+        <!-- Result -->
+        <h2>Result</h2>
+        <div>
+            RESULTS
+        </div>
+    </div>
+  </body>
+</html>
