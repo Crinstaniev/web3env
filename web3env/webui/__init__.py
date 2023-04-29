@@ -6,6 +6,9 @@ def create_app():
     from .consensus import consensus
     app.register_blueprint(consensus, url_prefix='/consensus')
     
+    # config secret key
+    app.config['SECRET_KEY'] = 'secret_key'
+    
     @app.route('/')
     def hello():
         return 'Welcome to Web3Env UI!'

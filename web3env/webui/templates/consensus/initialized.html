@@ -1,0 +1,26 @@
+{% extends 'consensus/index.html' %} {% block initialized %}
+<div>
+  <h2>Environment Summary</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    {% for key, value in args.env_info.items() %}
+    <tr>
+      <td>{{ key }}</td>
+      <td>{{ value }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  <form method="POST" action="/consensus/run">
+    <button type="submit">Run</button>
+  </form>
+  <hr>
+  {% block run %}
+  {% endblock %}
+</div>
+<hr />
+{% endblock %}

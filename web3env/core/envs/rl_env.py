@@ -59,6 +59,16 @@ class CustomEnv(gym.Env):
         self.reset()
 
         super(CustomEnv, self).__init__()
+        
+    def get_env_info(self):
+        return dict(
+            validator_size=self.validator_size,
+            alpha=self.alpha,
+            total_active_balance=self.total_active_balance,
+            proportion_of_honest=self.proportion_of_honest,
+            counter=self.counter,
+            limit=self.limit,
+        )
 
     def reset(self):
         """
