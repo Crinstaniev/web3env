@@ -1,32 +1,28 @@
 import json
 import os
-import sys
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import pytest
-from core.envs.rl_env import CustomEnv
-from stable_baselines3 import A2C, DDPG, PPO
-from stable_baselines3.common import results_plotter
-from stable_baselines3.common.monitor import Monitor
-from stable_baselines3.common.noise import NormalActionNoise
-from stable_baselines3.common.results_plotter import plot_results
-from tqdm import tqdm
+from stable_baselines3 import A2C
+
+from web3env.core.envs.rl_env import CustomEnv
 
 EPOCHS = 30
 LIMIT = 256
 TAKES = 8
 SEED = 42
 
-initial_proportions = [0.001, 0.1, 0.2, 0.3,
-                       0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.999]
-
-# @pytest.mark.skip()
-def test_a2c():
-    log = []
-    log_interval = 1000
+def train_model(env: CustomEnv, log_interval: int = 100):
     DATA_PATH = os.environ.get('DATA_PATH')
+    # clean data folder
+    if os.path.exists(DATA_PATH + '/a2c.json'):
+        os.remove(DATA_PATH + '/a2c.json')
+    if os.path.exists(DATA_PATH + '/a2c.zip'):
+        os.remove(DATA_PATH + '/a2c.zip')
+    if os.path.exists(DATA_PATH + '/a2c.csv'):
+        os.remove(DATA_PATH + '/a2c.csv')
+    
+    log = []
     def callback_fn(locals_, globals_):
         rewards = locals_['rewards']
         infos = locals_['infos']
@@ -54,25 +50,18 @@ def test_a2c():
             # append to json
             log.append(payload)
             with open(DATA_PATH + '/a2c.json', 'w') as f:
+                print('writing to trainning log')
                 json.dump(log, f)
-            
     
     np.random.seed(SEED)
     env = CustomEnv()
-
-    observation = env.reset()
-
     timesteps = LIMIT * 32
-
     model = A2C("MultiInputPolicy", env, verbose=0)
-
     model.learn(total_timesteps=timesteps, callback=callback_fn)
-
     model.save(DATA_PATH + '/a2c')
-
+    
     # test model
     observation = env.reset()
-
     info_records = []
     while 1:
         action, _states = model.predict(observation, deterministic=True)
@@ -80,5 +69,6 @@ def test_a2c():
         info_records.append(info)
         if done:
             break
-        
-    
+
+    df = pd.DataFrame(info_records)
+    df.to_csv(os.path.join(DATA_PATH, 'a2c.csv'), index=False)

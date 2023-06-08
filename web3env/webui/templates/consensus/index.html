@@ -1,75 +1,60 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Consensus</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='style.css') }}"
-    />
-  </head>
-  <body>
-    <div>
-      <h1>Blockchain Consensus</h1>
-    </div>
-    <div>
-      <h2>Game Configuration</h2>
-      <form action="/consensus/build_env" method="POST">
-        <div>
-          <h3>Environment Configuration</h3>
 
-          <label for="maximum_rounds">Maximum Rounds</label>
-          <input
-            type="number"
-            name="maximum_rounds"
-            id="maximum_rounds"
-            value="128"
-          /><br /><br />
+<head>
+  <title>Consensus</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
 
-          <label for="load_env">Load Environment Configuration</label>
-          <select name="load_env" id="load_env">
-            <option value="option_1">Ethereum</option>
-            <option value="option_2">option_2</option>
-          </select>
-        </div>
-        <div>
-          <h3>Validator Configuration</h3>
+<body>
+  <div>
+    <h1>Blockchain Consensus</h1>
+  </div>
+  <div>
+    <h2>Game Configuration</h2>
+    <br />
+    <form action="/consensus/build_env" method="POST">
+      <label for="load_env">Environment Schema</label>
+      <select name="load_env" id="load_env">
+        <option value="option_1">Ethereum</option>
+        <option value="option_2">option_2</option>
+      </select>
+      <div>
+        <br />
+        <h3>Environment Configuration</h3>
+        <br />
+        <label for="maximum_rounds">Maximum Rounds</label>
+        <input type="number" name="maximum_rounds" id="maximum_rounds" value="128" /><br /><br />
+      </div>
+      <div>
+        <h3>Validator Configuration</h3>
 
-          <label for="validator_size">Validator Size</label>
-          <input
-            type="number"
-            name="validator_size"
-            id="validator_size"
-            value="128"
-          /><br /><br />
+        <label for="validator_size">Validator Size</label>
+        <input type="number" name="validator_size" id="validator_size" value="128" /><br /><br />
 
-          <label for="initial_proportion">Initial Proportion of Honest</label>
-          <input
-            type="number"
-            step="0.01"
-            name="initial_proportion"
-            id="initial_proportion"
-            value="0.5"
-          /><br /><br />
+        <label for="initial_proportion">Initial Proportion of Honest</label>
+        <input type="number" step="0.01" name="initial_proportion" id="initial_proportion" value="0.5" /><br /><br />
 
-          <select name="load_val" id="load_val">
-            <option value="option_1">Basic</option>
-            <option value="option_2">option_2</option>
-          </select>
-        </div>
-        <button type="submit">Initialize</button>
-        <div>
-          {% with messages = get_flashed_messages() %} {% if messages %}
-          <ul>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-          </ul>
-          {% endif %} {% endwith %}
-        </div>
-      </form>
-    </div>
-    <hr />
+        <select name="load_val" id="load_val">
+          <option value="option_1">Basic</option>
+          <option value="option_2">option_2</option>
+        </select>
+      </div>
+      <button type="submit">Initialize</button>
+      <div>
+        {% with messages = get_flashed_messages() %} {% if messages %}
+        <ul>
+          {% for message in messages %}
+          <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %} {% endwith %}
+      </div>
+    </form>
+  </div>
+  <hr />
 
-    {% block initialized %} {% endblock %}
-  </body>
+  {% block initialized %} {% endblock %}
+</body>
+
 </html>

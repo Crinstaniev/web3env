@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, redirect
 
 def create_app():
     app = Flask(__name__)
@@ -11,6 +11,7 @@ def create_app():
     
     @app.route('/')
     def hello():
-        return 'Welcome to Web3Env UI!'
+        # return 'Welcome to Web3Env UI!'
+        return redirect('/consensus')
 
     return app

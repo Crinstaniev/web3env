@@ -1,4 +1,108 @@
-{% extends 'consensus/initialized.html' %}
-{% block run %}
+{% extends 'consensus/initialized.html' %} {% block run %}
 <h1>RUNNING</h1>
+<div id="status-blocks"></div>
+<hr />
+<div>
+  <h2>Visualization</h2>
+  <form action="/consensus/visualize" method="get">
+    <h3>Vis Configuration</h3>
+    <div>
+      <label for="vis-config">vis_config</label>
+      <textarea
+        id="vis-config"
+        name="vis_config"
+        rows="10"
+        cols="100"
+        required
+      >placeholder</textarea>
+    <button type="submit" id="vis-button" disabled="disabled">
+      Create Plots
+    </button>
+  </form>
+</div>
+<script>
+  // periodically fetch consensus/training_log
+  const window_this = window;
+  const interval_fetch = window.setInterval(() => {
+    fetch("/consensus/training_status")
+      .then((response) => response.json())
+      .then((data) => {
+        if (data["status"] === "running") {
+          fetch("/consensus/training_log")
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(data);
+              const statusBlocks = document.getElementById("status-blocks");
+              statusBlocks.innerHTML = "";
+              data.forEach((value, index) => {
+                const alpha = value["alpha"];
+                const honest_proportion = value["honest_proportion"];
+                const reward = value["reward"];
+                const round = value["round"];
+                const sum_balance_all = value["sum_balance_all"];
+                const sum_balance_honest = value["sum_balance_honest"];
+                const total_honest_effective_balance =
+                  value["total_honest_effective_balance"];
+
+                const ul = document.createElement("ul");
+                ul.className = "list-group";
+                // append data to ul
+                const alphaLi = document.createElement("li");
+                alphaLi.className = "list-group-item";
+                alphaLi.innerHTML = `alpha: ${alpha}`;
+                ul.appendChild(alphaLi);
+                const honestProportionLi = document.createElement("li");
+                honestProportionLi.className = "list-group-item";
+                honestProportionLi.innerHTML = `honest_proportion: ${honest_proportion}`;
+                ul.appendChild(honestProportionLi);
+                const rewardLi = document.createElement("li");
+                rewardLi.className = "list-group-item";
+                rewardLi.innerHTML = `reward: ${reward}`;
+                ul.appendChild(rewardLi);
+                const roundLi = document.createElement("li");
+                roundLi.className = "list-group-item";
+                roundLi.innerHTML = `round: ${round}`;
+                ul.appendChild(roundLi);
+                const sumBalanceAllLi = document.createElement("li");
+                sumBalanceAllLi.className = "list-group-item";
+                sumBalanceAllLi.innerHTML = `sum_balance_all: ${sum_balance_all}`;
+                ul.appendChild(sumBalanceAllLi);
+                const sumBalanceHonestLi = document.createElement("li");
+                sumBalanceHonestLi.className = "list-group-item";
+                sumBalanceHonestLi.innerHTML = `sum_balance_honest: ${sum_balance_honest}`;
+                ul.appendChild(sumBalanceHonestLi);
+                const totalHonestEffectiveBalanceLi =
+                  document.createElement("li");
+                totalHonestEffectiveBalanceLi.className = "list-group-item";
+                totalHonestEffectiveBalanceLi.innerHTML = `total_honest_effective_balance: ${total_honest_effective_balance}`;
+                ul.appendChild(totalHonestEffectiveBalanceLi);
+                statusBlocks.appendChild(ul); // append ul to status-blocks
+                const hr = document.createElement("hr");
+                statusBlocks.appendChild(hr); // append hr to status-blocks
+                // <!-- <ul class="list-group">
+                //   <li class="list-group-item">alpha: {{ alpha }}</li>
+                //   <li class="list-group-item">honest_proportion: {{ honest_proportion }}</li>
+                //   <li class="list-group-item">reward: {{ reward }}</li>
+                //   <li class="list-group-item">round: {{ round }}</li>
+                //   <li class="list-group-item">sum_balance_all: {{ sum_balance_all }}</
+              });
+            });
+          // scroll to bottom
+          window.scrollTo(0, document.body.scrollHeight);
+        } else {
+          console.log("training is not running");
+          // append <h3>training done</h3>
+          const statusBlocks = document.getElementById("status-blocks");
+          const h3 = document.createElement("h3");
+          h3.innerHTML = "training done";
+          statusBlocks.appendChild(h3);
+          // enable vis-button
+          const visButton = document.getElementById("vis-button");
+          visButton.disabled = false;
+          // exit setInterval
+          window.clearInterval(interval_fetch);
+        }
+      });
+  }, 200);
+</script>
 {% endblock %}
