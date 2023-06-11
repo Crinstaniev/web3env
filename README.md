@@ -1,5 +1,9 @@
 # web3env
 
+## Install Docker
+
+The demo relies on `docker` to run. To install docker, refer to the docker official documentation <https://docs.docker.com/engine/install/>
+
 ## Run DEMO
 
 Depend on your platform, we built docker images for `arm64` and `amd64`.
